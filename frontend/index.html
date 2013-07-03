@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript"
+        src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="chartkick.js"></script>
+
+<script type="text/javascript">
+var data = [], timestamps = [];
+var socket = new WebSocket("ws://localhost:8080/happiness");
+
+socket.onmessage = function(event) {
+            data.push(JSON.parse(event.data)["happiness"]);
+            timestamps.push(new Date);
+            refreshChart();}
+
+function refreshChart(){
+    new Chartkick.LineChart("chart", zip([timestamps,data]));
+}
+
+function zip(arrays) {
+    return arrays[0].map(function(_,i){
+        return arrays.map(function(array){return array[i];});
+    });
+}
+</script>
+</head>
+
+<body>
+  <div id="chart" style="height: 300px;"></div>
+</body>
+</html>
