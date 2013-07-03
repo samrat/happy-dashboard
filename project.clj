@@ -9,4 +9,5 @@
                  [http-kit "2.0.0"]
                  [compojure "1.1.5"]
                  [ring-cors "0.1.0"]]
-  :main happy-dashboard.core)
+  :main happy-dashboard.core
+  :min-lein-version "2.0.0")
