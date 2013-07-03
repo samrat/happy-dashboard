@@ -19,15 +19,16 @@
                     (swap! clients dissoc con)
                     (println con " disconnected. status: " status)))))
 
+(future (loop []
+          (doseq [client @clients]
+            (send! (key client) (generate-string
+                                 {:happiness (rand 10)})
+                   false))
+          (Thread/sleep 5000)
+          (recur)))
+
 (defroutes routes
-  (GET "/happiness" [] ws)
-  (GET "/start-push" [] (future (loop []
-                                  (doseq [client @clients]
-                                    (send! (key client) (generate-string
-                                                         {:happiness (rand 10)})
-                                           false))
-                                  (Thread/sleep 5000)
-                                  (recur)))))
+  (GET "/happiness" [] ws))
 
 (def application (-> (handler/site routes)
                      reload/wrap-reload
